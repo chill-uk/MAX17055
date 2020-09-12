@@ -3,9 +3,9 @@
 
 #define Serial Serial1
 #include "Wire.h"
-#include <Thanos_MAX17055.h>
+#include <MAX17055.h>
 
-Thanos_MAX17055 MAX17055;
+MAX17055 MAX17055;
 
 // MAX17055 valiables
 float cellVoltage = 0;
@@ -29,7 +29,7 @@ void setup() {
 #ifndef ESP8266
   while (!SerialUSB);     // will pause Zero, Leonardo, etc until serial console opens
 #endif
-  SerialUSB.println("Scanning...");
+  Serial.println("Scanning...");
 
   nDevices = 0;
   for (address = 1; address < 127; address++ )
@@ -42,9 +42,9 @@ void setup() {
     if (error == 0)
     {
       if (address < 112) {
-        SerialUSB.print("I2C device found at address 0x");
-        SerialUSB.print(address, HEX);
-        SerialUSB.println("  !");
+        Serial.print("I2C device found at address 0x");
+        Serial.print(address, HEX);
+        Serial.println("  !");
         //Serial.print(" 0x");
         //Serial.print(address, HEX);
         //Serial.print(",  ");
@@ -54,17 +54,17 @@ void setup() {
     else if (error == 4)
     {
       if (address < 112) {
-        SerialUSB.print("Unknow error at address 0x");
-        SerialUSB.println(address, HEX);
+        Serial.print("Unknow error at address 0x");
+        Serial.println(address, HEX);
       }
     }
   }
   if (nDevices == 0) {
-    SerialUSB.println("No I2C devices found\n");
+    Serial.println("No I2C devices found\n");
     Serial.println("No I2C devices found\n");
   }
   else
-  { SerialUSB.println("done\n");
+  { Serial.println("done\n");
     Serial.print(" done\r");
   }
 
@@ -72,8 +72,8 @@ void setup() {
 
   // Initialize the Max17055.
   MAX17055.begin();
-  SerialUSB.println(" MAX17055 started\r");
-  SerialUSB.println("Measuring voltage and current with MAX17055 ...");
+  Serial.println(" MAX17055 started\r");
+  Serial.println("Measuring voltage and current with MAX17055 ...");
 }
 
 void loop() {
@@ -88,26 +88,26 @@ void loop() {
   cellTTF = MAX17055.getTTF();
   uint16_t cellVoltagefix = cellVoltage;
   
-  SerialUSB.print("(");
-  SerialUSB.print(Avg_current_mA); // print the reading ( offset-reading multiply by sense resistor range minus offset
-  SerialUSB.print(" / ");
-  SerialUSB.print(current_mA); // print the reading ( offset-reading multiply by sense resistor range minus offset
-  SerialUSB.print(") - ");
-  SerialUSB.print("SOC ");
-  SerialUSB.print(stateOfCharge);   // print the reading High Byte only percent value
-  SerialUSB.print("% - ");
-  SerialUSB.print(cellVoltagefix);   // print the reading
-  SerialUSB.print("mV - ");
-  SerialUSB.print(" CAP ");
-  SerialUSB.print(RepCap);   // print the reading
-  SerialUSB.print("mAh of ");
-  SerialUSB.print(FullRepCap);   // print the reading
-  SerialUSB.print("mAh - ");
-  SerialUSB.print(DieTemp);  // print the reading
-  SerialUSB.print("C - ");
-  SerialUSB.print("Time to [Empty ");
-  SerialUSB.print(cellTTE); // print the reading
-  SerialUSB.print("hrs] - [Full ");
-  SerialUSB.print(cellTTF); // print the reading
-  SerialUSB.println("hrs]  ");
+  Serial.print("(");
+  Serial.print(Avg_current_mA); // print the reading ( offset-reading multiply by sense resistor range minus offset
+  Serial.print(" / ");
+  Serial.print(current_mA); // print the reading ( offset-reading multiply by sense resistor range minus offset
+  Serial.print(") - ");
+  Serial.print("SOC ");
+  Serial.print(stateOfCharge);   // print the reading High Byte only percent value
+  Serial.print("% - ");
+  Serial.print(cellVoltagefix);   // print the reading
+  Serial.print("mV - ");
+  Serial.print(" CAP ");
+  Serial.print(RepCap);   // print the reading
+  Serial.print("mAh of ");
+  Serial.print(FullRepCap);   // print the reading
+  Serial.print("mAh - ");
+  Serial.print(DieTemp);  // print the reading
+  Serial.print("C - ");
+  Serial.print("Time to [Empty ");
+  Serial.print(cellTTE); // print the reading
+  Serial.print("hrs] - [Full ");
+  Serial.print(cellTTF); // print the reading
+  Serial.println("hrs]  ");
 }

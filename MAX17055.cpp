@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*! 
-   	@file     Thanos_MAX17055.cpp
+   	@file     MAX17055.cpp
    	@author   Thanos Kontogiannis 
 	@license  BSD License
 	
@@ -12,18 +12,18 @@
 /**************************************************************************/
 #include "Arduino.h"
 #include <Wire.h>
-#include "Thanos_MAX17055.h"
+#include "MAX17055.h"
 
 /**************************************************************************/
 /*! 
     @brief  Instantiates a new MAX17055 class
 */
 /**************************************************************************/
-Thanos_MAX17055::Thanos_MAX17055(uint8_t addr) {
+MAX17055::MAX17055(uint8_t addr) {
   MAX17055_i2caddr = addr;
 }
 
-void Thanos_MAX17055::readRegister(byte reg, uint16_t *value) 
+void MAX17055::readRegister(byte reg, uint16_t *value) 
 {
 	byte MSB = 0;
 	byte LSB = 0;
@@ -36,7 +36,7 @@ void Thanos_MAX17055::readRegister(byte reg, uint16_t *value)
     *value = (MSB << 8) | LSB;	
 }
 
-void Thanos_MAX17055::readbyteRegister(byte reg, byte &MSB, byte &LSB) {
+void MAX17055::readbyteRegister(byte reg, byte &MSB, byte &LSB) {
 	Wire.beginTransmission(MAX17055_i2caddr);
 	Wire.write(reg);
 	Wire.endTransmission();
@@ -45,7 +45,7 @@ void Thanos_MAX17055::readbyteRegister(byte reg, byte &MSB, byte &LSB) {
 	MSB = Wire.read();
 }
 
-void Thanos_MAX17055::writeRegister(byte reg, uint16_t value) 
+void MAX17055::writeRegister(byte reg, uint16_t value) 
 {
 	byte MSB = 0;
 	byte LSB = 0;
@@ -65,7 +65,7 @@ void Thanos_MAX17055::writeRegister(byte reg, uint16_t value)
 			
 */
 /**************************************************************************/
-void Thanos_MAX17055::setConfigRegister(void)
+void MAX17055::setConfigRegister(void)
 {
   // Sets battery capacity to 2500mA and correct battery model
   // Set Battery Config registers 
@@ -92,7 +92,7 @@ void Thanos_MAX17055::setConfigRegister(void)
     @brief  Setups the HW 
 */
 /**************************************************************************/
-void Thanos_MAX17055::begin(void) {
+void MAX17055::begin(void) {
   Wire.begin();    
   // Set chip to large range config values to start
   setConfigRegister();
@@ -103,7 +103,7 @@ void Thanos_MAX17055::begin(void) {
     @brief  Gets the raw State Of Charge SOC (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getRepSOC_raw() {
+int16_t MAX17055::getRepSOC_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_RepSOC, &value);
   return (int16_t)value;
@@ -114,7 +114,7 @@ int16_t Thanos_MAX17055::getRepSOC_raw() {
     @brief  Gets the raw current value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getCurrent_raw() {
+int16_t MAX17055::getCurrent_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_CURRENT, &value);
   return (int16_t)value;
@@ -125,7 +125,7 @@ int16_t Thanos_MAX17055::getCurrent_raw() {
     @brief  Gets the raw Average current value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getAvgCurrent_raw() {
+int16_t MAX17055::getAvgCurrent_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_AVGCURRENT, &value);
   return (int16_t)value;
@@ -136,7 +136,7 @@ int16_t Thanos_MAX17055::getAvgCurrent_raw() {
     @brief  Gets the raw Reported Capacity value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getRepCap_raw() {
+int16_t MAX17055::getRepCap_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_RepCap, &value);
   return (int16_t)value;
@@ -147,7 +147,7 @@ int16_t Thanos_MAX17055::getRepCap_raw() {
     @brief  Gets the raw Full Reported Capacity value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getFullRepCap_raw() {
+int16_t MAX17055::getFullRepCap_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_FullRepCap, &value);
   return (int16_t)value;
@@ -158,7 +158,7 @@ int16_t Thanos_MAX17055::getFullRepCap_raw() {
     @brief  Gets the raw Temperature value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getTemp_raw() {
+int16_t MAX17055::getTemp_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_Temp, &value);
   return (int16_t)value;
@@ -169,7 +169,7 @@ int16_t Thanos_MAX17055::getTemp_raw() {
     @brief  Gets the raw Time to Empty value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getTTE_raw() {
+int16_t MAX17055::getTTE_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_TTE, &value);
   return (int16_t)value;
@@ -180,7 +180,7 @@ int16_t Thanos_MAX17055::getTTE_raw() {
     @brief  Gets the raw Time to Full value (16-bit signed integer, so +-32767)
 */
 /**************************************************************************/
-int16_t Thanos_MAX17055::getTTF_raw() {
+int16_t MAX17055::getTTF_raw() {
   uint16_t value;
   readRegister(MAX17055_REG_TTF, &value);
   return (int16_t)value;
@@ -191,7 +191,7 @@ int16_t Thanos_MAX17055::getTTF_raw() {
     @brief  Gets the current value in mA
 */
 /**************************************************************************/
-float Thanos_MAX17055::getCurrent_mA() {
+float MAX17055::getCurrent_mA() {
   int16_t valueDec = getCurrent_raw();
   return valueDec * 0.15625;
 }
@@ -201,7 +201,7 @@ float Thanos_MAX17055::getCurrent_mA() {
     @brief  Gets the Average current value in mA
 */
 /**************************************************************************/
-float Thanos_MAX17055::getAvgCurrent_mA() {
+float MAX17055::getAvgCurrent_mA() {
   int16_t valueDec = getAvgCurrent_raw();
   return valueDec * 0.15625;
 }
@@ -212,7 +212,7 @@ float Thanos_MAX17055::getAvgCurrent_mA() {
 */
 /**************************************************************************/
 
-float Thanos_MAX17055::getVoltageCell() {
+float MAX17055::getVoltageCell() {
   int value;
   byte MSB = 0;
   byte LSB = 0;
@@ -227,7 +227,7 @@ float Thanos_MAX17055::getVoltageCell() {
     @brief  Gets the Battery SOC (State of Charge) value in Percent
 */
 /**************************************************************************/
-float Thanos_MAX17055::getRepSOC() {	
+float MAX17055::getRepSOC() {	
 	int16_t valueDec = getRepSOC_raw();
   	return valueDec / 256 ;	
 }
@@ -238,7 +238,7 @@ float Thanos_MAX17055::getRepSOC() {
 */
 /**************************************************************************/
 
-float Thanos_MAX17055::getFullRepCap() {
+float MAX17055::getFullRepCap() {
 	int16_t valueDec = getFullRepCap_raw();
   	return valueDec;	
 }
@@ -249,7 +249,7 @@ float Thanos_MAX17055::getFullRepCap() {
     @brief  Gets the Battery Reported Capacity value in mAh
 */
 /**************************************************************************/
-float Thanos_MAX17055::getRepCap() {
+float MAX17055::getRepCap() {
 	int16_t valueDec = getRepCap_raw();
   	return valueDec;	
 }
@@ -259,7 +259,7 @@ float Thanos_MAX17055::getRepCap() {
     @brief  Gets the Temperature value in Celcius
 */
 /**************************************************************************/
-float Thanos_MAX17055::getTemp() {
+float MAX17055::getTemp() {
 	
 	int16_t valueDec = getTemp_raw();
   	return valueDec / 256.0 ;	
@@ -269,7 +269,7 @@ float Thanos_MAX17055::getTemp() {
     @brief  Gets the Time to Empty value in hours
 */
 /**************************************************************************/
-float Thanos_MAX17055::getTTE() {	
+float MAX17055::getTTE() {	
 	int16_t valueDec = getTTE_raw();
   	return valueDec / 640.002 ;	
 }
@@ -278,16 +278,16 @@ float Thanos_MAX17055::getTTE() {
     @brief  Gets the Time to Full value in hours
 */
 /**************************************************************************/
-float Thanos_MAX17055::getTTF() {	
+float MAX17055::getTTF() {	
 	int16_t valueDec = getTTF_raw();
   	return valueDec / 640.002 ;	
 }
 
-void Thanos_MAX17055::reset() {
+void MAX17055::reset() {
 	writeRegister(MAX17055_REG_Status_Reset, MAX17055_Status_Reset);
 }	
 
-void Thanos_MAX17055::quickStart() {	
+void MAX17055::quickStart() {	
 	writeRegister(MAX17055_REG_Status_Reset, MAX17055_Status_Reset);
 	writeRegister(MAX17055_REG_CONFIG_Miscfg, MAX17055_CONFIG_Miscfg);
 	writeRegister(MAX17055_REG_Status_Reset, MAX17055_Status_Reset_POR);

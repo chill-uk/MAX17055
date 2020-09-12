@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*! 
-    	@file     Thanos-MAX17055.h
+    	@file     MAX17055.h
     	@author   Thanos Kontogiannis
 	@license  BSD License
 		
@@ -124,9 +124,9 @@
     #define MAX17055_REG_TTF                           (0x20)
 /*=========================================================================*/
 
-class Thanos_MAX17055{
+class MAX17055{
  public:
-  Thanos_MAX17055(uint8_t addr = MAX17055_ADDRESS);
+  MAX17055(uint8_t addr = MAX17055_ADDRESS);
   void begin(void);
   void setConfigRegister(void);
   float getVoltageCell(void);
